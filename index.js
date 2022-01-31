@@ -13,6 +13,6 @@
  * ORIGEN
  * Desenvolupament Aplicacions Web. Jesuïtes el Clot
  */
-var server = require("./M04_servidorMillorat");
+var server = require("./servidorNode.js");
 
 server.iniciar();
