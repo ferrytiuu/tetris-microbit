@@ -116,7 +116,6 @@ function clearLines() {
             }
         }
         if ( rowFilled ) {
-            document.getElementById( 'clearsound' ).play();
             for ( var yy = y; yy > 0; --yy ) {
                 for ( var x = 0; x < COLS; ++x ) {
                     board[ yy ][ x ] = board[ yy - 1 ][ x ];
@@ -261,3 +260,15 @@ function render() {
         }
     }
 }
+
+setInterval(function () {
+    const xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            document.getElementById("teclaPresionada").innerHTML =
+                this.responseText;
+        }
+    };
+    xhttp.open("GET", "http://localhost:8888/botons");
+    xhttp.send();
+}, 100);
