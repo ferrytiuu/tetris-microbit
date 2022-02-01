@@ -6,6 +6,7 @@ var intervalRender;
 var current; // current moving shape
 var currentX, currentY; // position of current shape
 var freezed; // is current shape settled on the board?
+let puntuacio = 0;
 var shapes = [
     [ 1, 1, 1, 1 ],
     [ 1, 1, 1, 0,
@@ -90,6 +91,9 @@ function freeze() {
         }
     }
     freezed = true;
+    puntuacio+=50;
+    console.log(puntuacio);
+    document.getElementById('puntuacioPartida').innerHTML = puntuacio;
 }
 
 // returns rotates the rotated shape 'current' perpendicularly anticlockwise
