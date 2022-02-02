@@ -4,7 +4,7 @@ var url = require("url");
 var fs = require("fs");
 
 const SerialPort = require('serialport');
-const port = new SerialPort('COM4', { baudRate: 115200 });
+const port = new SerialPort('COM3', { baudRate: 115200 });
 const ReadLine = require('@serialport/parser-readline');
 const parser = port.pipe(new ReadLine({ delimiter: '\n' }));
 

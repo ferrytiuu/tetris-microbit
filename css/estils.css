@@ -1,11 +1,18 @@
-canvas {
-    display: block;
-    margin: auto;
-    border: 1px solid black;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body{
     font-family: Arial, sans-serif;
+}
+
+canvas {
+    display: block;
+    margin: auto;
+    margin-top: 10px;
+    border: 1px solid black;
 }
 
 #playbutton {
@@ -18,4 +25,10 @@ body{
     font-weight: bold;
     background-color: white;
     cursor: pointer;
+}
+
+.puntuacio {
+    position: absolute;
+    left: 20px;
+    top: 20px;
 }

@@ -181,6 +181,7 @@ function valid( offsetX, offsetY, newCurrent ) {
                   || x + offsetX >= COLS ) {
                     if (offsetY == 1 && freezed) {
                         lose = true; // lose if the current shape is settled at the top most row
+                        enregistra_resultats();
                         document.getElementById('playbutton').disabled = false;
                     } 
                     return false;
@@ -197,6 +198,8 @@ function playButtonClicked() {
 }
 
 function newGame() {
+    puntuacio = 0;
+    document.getElementById('puntuacioPartida').innerHTML = puntuacio;
     clearAllIntervals();
     intervalRender = setInterval( render, 30 );
     init();
@@ -276,3 +279,41 @@ setInterval(function () {
     xhttp.open("GET", "http://localhost:8888/botons");
     xhttp.send();
 }, 100);
+
+var nom;
+
+var emmagatzematge = {
+    taula: document.getElementById("taula"),
+    desar: function(nomDesar) {
+        localStorage.setItem(nomDesar, puntuacio);
+        emmagatzematge.esborrarTaula();
+        emmagatzematge.mostrar();
+    },
+    mostrar: function() {
+        for (var i = 0; i < localStorage.length; i++) {
+            var fila = taula.insertRow(0);
+            fila.insertCell(0).innerHTML = localStorage.key(i);
+            fila.insertCell(1).innerHTML = localStorage.getItem(localStorage.key(i));
+        };
+    },
+    esborrarTaula: function() {
+        while (taula.rows.length > 0) {
+            taula.deleteRow(0);
+        }
+    }
+}
+
+function enregistra_resultats() {
+    var nom = prompt('Introdueix el teu nom: ');
+    emmagatzematge.desar(nom);
+}
+
+window.onload = () => {emmagatzematge.mostrar()};
+
+/*
+bugs: 
+-suma 50 punts mes al final
+-s'ha d'impedir registrar valors null, undefined i espais en blanc al ranking
+-s'ha d'ordenar el ranking per puntuació
+-localStorage.clear(); per borrar el ranking
+*/

@@ -1,15 +1,23 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta charset="UTF-8">
         <title>HTML5 Tetris</title>
         <link rel='stylesheet' href='/estils' />
         
     </head>
     <body>
         <canvas width='300' height='600'></canvas>
-        <h1>Botó presionat: <label id="teclaPresionada">0</label></h1>
-        <h2>Puntuació: <label id="puntuacioPartida">0</label></h2>
         <button id="playbutton" onclick="playButtonClicked();">Play</button>
+        <div class="puntuacio">
+            <h1>Botó presionat: <label id="teclaPresionada">0</label></h1>
+            <h2>Puntuació: <label id="puntuacioPartida">0</label></h2>
+            <br>
+            <br>
+            <br>
+            <table class="m08" id="taula">
+            </table>
+        </div>
         <script src="/mainjs"></script>
         
     </body>
