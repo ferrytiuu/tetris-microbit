@@ -4,7 +4,7 @@ var url = require("url");
 var fs = require("fs");
 
 const SerialPort = require('serialport');
-const port = new SerialPort('COM3', { baudRate: 115200 });
+const port = new SerialPort('COM4', { baudRate: 115200 });
 const ReadLine = require('@serialport/parser-readline');
 const parser = port.pipe(new ReadLine({ delimiter: '\n' }));
 
@@ -20,6 +20,14 @@ function iniciar() {
     parser.on('data', (data) => {
         console.log(data);
         botons.push(data);
+    });
+
+    port.write('1\n', (error)=>{
+        if(error){
+            return console.log('Error: ',error.message)
+        }else{
+            console.log('Not error')
+        }
     });
 
     function onRequest(req, res) {
@@ -38,12 +46,6 @@ function iniciar() {
             res.write(content);
             return res.end();
 
-
-            /*fs.readFileSync('index.html', function(err, data) {
-                res.writeHead(200, {'Content-Type': 'text/html'});
-                res.write(data);
-                return res.end();
-              });*/
         }
         else if (reqUrl.pathname == '/mainjs') {
             let content = fs.readFileSync('js/main.js', { encoding: 'utf8' });
@@ -83,9 +85,6 @@ function iniciar() {
         }
 
     }
-
-
-
 
     http.createServer(onRequest).listen(8888);
     console.log("Servidor iniciat.");

@@ -27,6 +27,12 @@ canvas {
     cursor: pointer;
 }
 
+#taula{
+    border: 1px solid black;
+    padding: 2rem;
+    border-radius: 0.5rem;
+}
+
 .puntuacio {
     position: absolute;
     left: 20px;

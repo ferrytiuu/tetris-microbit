@@ -8,19 +8,19 @@ var currentX, currentY; // position of current shape
 var freezed; // is current shape settled on the board?
 let puntuacio = 0;
 var shapes = [
-    [ 1, 1, 1, 1 ],
-    [ 1, 1, 1, 0,
-      1 ],
-    [ 1, 1, 1, 0,
-      0, 0, 1 ],
-    [ 1, 1, 0, 0,
-      1, 1 ],
-    [ 1, 1, 0, 0,
-      0, 1, 1 ],
-    [ 0, 1, 1, 0,
-      1, 1 ],
-    [ 0, 1, 0, 0,
-      1, 1, 1 ]
+    [1, 1, 1, 1],
+    [1, 1, 1, 0,
+        1],
+    [1, 1, 1, 0,
+        0, 0, 1],
+    [1, 1, 0, 0,
+        1, 1],
+    [1, 1, 0, 0,
+        0, 1, 1],
+    [0, 1, 1, 0,
+        1, 1],
+    [0, 1, 0, 0,
+        1, 1, 1]
 ];
 var colors = [
     'cyan', 'orange', 'blue', 'yellow', 'red', 'green', 'purple'
@@ -29,43 +29,71 @@ var colors = [
 // creates a new 4x4 shape in global variable 'current'
 // 4x4 so as to cover the size when the shape is rotated
 function newShape() {
-    var id = Math.floor( Math.random() * shapes.length );
-    var shape = shapes[ id ]; // maintain id for color filling
+    var id = Math.floor(Math.random() * shapes.length);
+    var shape = shapes[id]; // maintain id for color filling
+
+    document.getElementById('pecaActual').innerHTML = id;
+
 
     current = [];
-    for ( var y = 0; y < 4; ++y ) {
-        current[ y ] = [];
-        for ( var x = 0; x < 4; ++x ) {
+    for (var y = 0; y < 4; ++y) {
+        current[y] = [];
+        for (var x = 0; x < 4; ++x) {
             var i = 4 * y + x;
-            if ( typeof shape[ i ] != 'undefined' && shape[ i ] ) {
-                current[ y ][ x ] = id + 1;
+            if (typeof shape[i] != 'undefined' && shape[i]) {
+                current[y][x] = id + 1;
             }
             else {
-                current[ y ][ x ] = 0;
+                current[y][x] = 0;
             }
         }
     }
-    
+
     // new shape starts to move
     freezed = false;
     // position where the shape will evolve
     currentX = 5;
     currentY = 0;
+
+    switch (id) {
+        case '0':
+            port.write('0');
+            break;
+        case '1':
+            port.write('1');
+            break;
+        case '2':
+            port.write('2');
+            break;
+        case '3':
+            port.write('3');
+            break;
+        case '4':
+            port.write('4');
+            break;
+        case '5':
+            port.write('5');
+            break;
+        case '6':
+            port.write('6');
+            break;
+
+    }
 }
 
 // clears the board
 function init() {
-    for ( var y = 0; y < ROWS; ++y ) {
-        board[ y ] = [];
-        for ( var x = 0; x < COLS; ++x ) {
-            board[ y ][ x ] = 0;
+    for (var y = 0; y < ROWS; ++y) {
+        board[y] = [];
+        for (var x = 0; x < COLS; ++x) {
+            board[y][x] = 0;
         }
     }
 }
 
 // keep the element moving down, creating new shapes and clearing lines
 function tick() {
-    if ( valid( 0, 1 ) ) {
+    if (valid(0, 1)) {
         ++currentY;
     }
     // if the element settled
@@ -83,26 +111,26 @@ function tick() {
 
 // stop shape at its position and fix it to board
 function freeze() {
-    for ( var y = 0; y < 4; ++y ) {
-        for ( var x = 0; x < 4; ++x ) {
-            if ( current[ y ][ x ] ) {
-                board[ y + currentY ][ x + currentX ] = current[ y ][ x ];
+    for (var y = 0; y < 4; ++y) {
+        for (var x = 0; x < 4; ++x) {
+            if (current[y][x]) {
+                board[y + currentY][x + currentX] = current[y][x];
             }
         }
     }
     freezed = true;
-    puntuacio+=50;
+    puntuacio += 50;
     console.log(puntuacio);
     document.getElementById('puntuacioPartida').innerHTML = puntuacio;
 }
 
 // returns rotates the rotated shape 'current' perpendicularly anticlockwise
-function rotate( current ) {
+function rotate(current) {
     var newCurrent = [];
-    for ( var y = 0; y < 4; ++y ) {
-        newCurrent[ y ] = [];
-        for ( var x = 0; x < 4; ++x ) {
-            newCurrent[ y ][ x ] = current[ 3 - x ][ y ];
+    for (var y = 0; y < 4; ++y) {
+        newCurrent[y] = [];
+        for (var x = 0; x < 4; ++x) {
+            newCurrent[y][x] = current[3 - x][y];
         }
     }
 
@@ -111,18 +139,18 @@ function rotate( current ) {
 
 // check if any lines are filled and clear them
 function clearLines() {
-    for ( var y = ROWS - 1; y >= 0; --y ) {
+    for (var y = ROWS - 1; y >= 0; --y) {
         var rowFilled = true;
-        for ( var x = 0; x < COLS; ++x ) {
-            if ( board[ y ][ x ] == 0 ) {
+        for (var x = 0; x < COLS; ++x) {
+            if (board[y][x] == 0) {
                 rowFilled = false;
                 break;
             }
         }
-        if ( rowFilled ) {
-            for ( var yy = y; yy > 0; --yy ) {
-                for ( var x = 0; x < COLS; ++x ) {
-                    board[ yy ][ x ] = board[ yy - 1 ][ x ];
+        if (rowFilled) {
+            for (var yy = y; yy > 0; --yy) {
+                for (var x = 0; x < COLS; ++x) {
+                    board[yy][x] = board[yy - 1][x];
                 }
             }
             ++y;
@@ -130,31 +158,31 @@ function clearLines() {
     }
 }
 
-function keyPress( key ) {
-    switch ( key ) {
-        case 'left':
-            if ( valid( -1 ) ) {
+function keyPress(direccio) {
+    switch (direccio) {
+        case 'botoA':
+            if (valid(-1)) {
                 --currentX;
             }
             break;
-        case 'right':
-            if ( valid( 1 ) ) {
+        case 'botoB':
+            if (valid(1)) {
                 ++currentX;
             }
             break;
         case 'down':
-            if ( valid( 0, 1 ) ) {
+            if (valid(0, 1)) {
                 ++currentY;
             }
             break;
-        case 'rotate':
-            var rotated = rotate( current );
-            if ( valid( 0, 0, rotated ) ) {
+        case 'botoC':
+            var rotated = rotate(current);
+            if (valid(0, 0, rotated)) {
                 current = rotated;
             }
             break;
         case 'drop':
-            while( valid(0, 1) ) {
+            while (valid(0, 1)) {
                 ++currentY;
             }
             tick();
@@ -162,28 +190,60 @@ function keyPress( key ) {
     }
 }
 
+/*function keyPress(key) {
+    switch (key) {
+        case 'left':
+            if (valid(-1)) {
+                --currentX;
+            }
+            break;
+        case 'right':
+            if (valid(1)) {
+                ++currentX;
+            }
+            break;
+        case 'down':
+            if (valid(0, 1)) {
+                ++currentY;
+            }
+            break;
+        case 'rotate':
+            var rotated = rotate(current);
+            if (valid(0, 0, rotated)) {
+                current = rotated;
+            }
+            break;
+        case 'drop':
+            while (valid(0, 1)) {
+                ++currentY;
+            }
+            tick();
+            break;
+    }
+}*/
+
 // checks if the resulting position of current shape will be feasible
-function valid( offsetX, offsetY, newCurrent ) {
+function valid(offsetX, offsetY, newCurrent) {
     offsetX = offsetX || 0;
     offsetY = offsetY || 0;
     offsetX = currentX + offsetX;
     offsetY = currentY + offsetY;
     newCurrent = newCurrent || current;
 
-    for ( var y = 0; y < 4; ++y ) {
-        for ( var x = 0; x < 4; ++x ) {
-            if ( newCurrent[ y ][ x ] ) {
-                if ( typeof board[ y + offsetY ] == 'undefined'
-                  || typeof board[ y + offsetY ][ x + offsetX ] == 'undefined'
-                  || board[ y + offsetY ][ x + offsetX ]
-                  || x + offsetX < 0
-                  || y + offsetY >= ROWS
-                  || x + offsetX >= COLS ) {
+    for (var y = 0; y < 4; ++y) {
+        for (var x = 0; x < 4; ++x) {
+            if (newCurrent[y][x]) {
+                if (typeof board[y + offsetY] == 'undefined'
+                    || typeof board[y + offsetY][x + offsetX] == 'undefined'
+                    || board[y + offsetY][x + offsetX]
+                    || x + offsetX < 0
+                    || y + offsetY >= ROWS
+                    || x + offsetX >= COLS) {
                     if (offsetY == 1 && freezed) {
                         lose = true; // lose if the current shape is settled at the top most row
                         enregistra_resultats();
                         document.getElementById('playbutton').disabled = false;
-                    } 
+                    }
                     return false;
                 }
             }
@@ -201,21 +261,21 @@ function newGame() {
     puntuacio = 0;
     document.getElementById('puntuacioPartida').innerHTML = puntuacio;
     clearAllIntervals();
-    intervalRender = setInterval( render, 30 );
+    intervalRender = setInterval(render, 30);
     init();
     newShape();
     lose = false;
-    interval = setInterval( tick, 400 );
+    interval = setInterval(tick, 400);
 }
 
-function clearAllIntervals(){
-    clearInterval( interval );
-    clearInterval( intervalRender );
+function clearAllIntervals() {
+    clearInterval(interval);
+    clearInterval(intervalRender);
 }
 
 /* controller.js */
 
-document.body.onkeydown = function( e ) {
+/*document.body.onkeydown = function (e) {
     var keys = {
         37: 'left',
         39: 'right',
@@ -223,46 +283,46 @@ document.body.onkeydown = function( e ) {
         38: 'rotate',
         32: 'drop'
     };
-    if ( typeof keys[ e.keyCode ] != 'undefined' ) {
-        keyPress( keys[ e.keyCode ] );
+    if (typeof keys[e.keyCode] != 'undefined') {
+        keyPress(keys[e.keyCode]);
         render();
     }
-};
+};*/
 
 /* render.js */
 
-var canvas = document.getElementsByTagName( 'canvas' )[ 0 ];
-var ctx = canvas.getContext( '2d' );
+var canvas = document.getElementsByTagName('canvas')[0];
+var ctx = canvas.getContext('2d');
 var W = 300, H = 600;
 var BLOCK_W = W / COLS, BLOCK_H = H / ROWS;
 
 // draw a single square at (x, y)
-function drawBlock( x, y ) {
-    ctx.fillRect( BLOCK_W * x, BLOCK_H * y, BLOCK_W - 1 , BLOCK_H - 1 );
-    ctx.strokeRect( BLOCK_W * x, BLOCK_H * y, BLOCK_W - 1 , BLOCK_H - 1 );
+function drawBlock(x, y) {
+    ctx.fillRect(BLOCK_W * x, BLOCK_H * y, BLOCK_W - 1, BLOCK_H - 1);
+    ctx.strokeRect(BLOCK_W * x, BLOCK_H * y, BLOCK_W - 1, BLOCK_H - 1);
 }
 
 // draws the board and the moving shape
 function render() {
-    ctx.clearRect( 0, 0, W, H );
+    ctx.clearRect(0, 0, W, H);
 
     ctx.strokeStyle = 'black';
-    for ( var x = 0; x < COLS; ++x ) {
-        for ( var y = 0; y < ROWS; ++y ) {
-            if ( board[ y ][ x ] ) {
-                ctx.fillStyle = colors[ board[ y ][ x ] - 1 ];
-                drawBlock( x, y );
+    for (var x = 0; x < COLS; ++x) {
+        for (var y = 0; y < ROWS; ++y) {
+            if (board[y][x]) {
+                ctx.fillStyle = colors[board[y][x] - 1];
+                drawBlock(x, y);
             }
         }
     }
 
     ctx.fillStyle = 'red';
     ctx.strokeStyle = 'black';
-    for ( var y = 0; y < 4; ++y ) {
-        for ( var x = 0; x < 4; ++x ) {
-            if ( current[ y ][ x ] ) {
-                ctx.fillStyle = colors[ current[ y ][ x ] - 1 ];
-                drawBlock( currentX + x, currentY + y );
+    for (var y = 0; y < 4; ++y) {
+        for (var x = 0; x < 4; ++x) {
+            if (current[y][x]) {
+                ctx.fillStyle = colors[current[y][x] - 1];
+                drawBlock(currentX + x, currentY + y);
             }
         }
     }
@@ -272,11 +332,13 @@ setInterval(function () {
     const xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-            document.getElementById("teclaPresionada").innerHTML =
-                this.responseText;
+            let teclaPresionada = this.responseText;
+            document.getElementById("teclaPresionada").innerHTML =teclaPresionada;
+            
         }
     };
     xhttp.open("GET", "http://localhost:8888/botons");
+    keyPress(teclaPresionada);
     xhttp.send();
 }, 100);
 
@@ -284,19 +346,19 @@ var nom;
 
 var emmagatzematge = {
     taula: document.getElementById("taula"),
-    desar: function(nomDesar) {
+    desar: function (nomDesar) {
         localStorage.setItem(nomDesar, puntuacio);
         emmagatzematge.esborrarTaula();
         emmagatzematge.mostrar();
     },
-    mostrar: function() {
+    mostrar: function () {
         for (var i = 0; i < localStorage.length; i++) {
             var fila = taula.insertRow(0);
             fila.insertCell(0).innerHTML = localStorage.key(i);
             fila.insertCell(1).innerHTML = localStorage.getItem(localStorage.key(i));
         };
     },
-    esborrarTaula: function() {
+    esborrarTaula: function () {
         while (taula.rows.length > 0) {
             taula.deleteRow(0);
         }
@@ -308,7 +370,7 @@ function enregistra_resultats() {
     emmagatzematge.desar(nom);
 }
 
-window.onload = () => {emmagatzematge.mostrar()};
+window.onload = () => { emmagatzematge.mostrar() };
 
 /*
 bugs: 
