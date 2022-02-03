@@ -2,6 +2,8 @@ const { fstat } = require("fs");
 var http = require("http");
 var url = require("url");
 var fs = require("fs");
+const formidable = require("formidable");
+const form = formidable({multiples: true});
 
 const SerialPort = require('serialport');
 const port = new SerialPort('COM4', { baudRate: 115200 });
@@ -33,8 +35,8 @@ function iniciar() {
     function onRequest(req, res) {
         const baseURL = req.protocol + '://' + req.headers.host + '/';
         const reqUrl = new URL(req.url, baseURL);
-        console.log(reqUrl);
-        console.log("Petició per a  " + reqUrl.pathname + " rebuda.");
+        /*console.log(reqUrl);*/
+        /*console.log("Petició per a  " + reqUrl.pathname + " rebuda.");*/
 
         if (reqUrl.pathname == '/inici') {
             let content = fs.readFileSync('index.html', { encoding: 'utf8' });
@@ -77,6 +79,15 @@ function iniciar() {
             res.writeHead(200, { "Content-Type": "text/plain; charset=utf-8" });
             res.write(botonsPila);
             console.log(botonsPila);
+            return res.end();
+
+        } else if (reqUrl.pathname == '/estatPartida') {
+            form.parse(req, async (err, fields, files) => {
+                /*console.log("Campos:" + fields);*/
+                estatPartida= fields.estado;
+                console.log(estatPartida);
+            });
+            res.writeHead(200);
             return res.end();
 
         } else {

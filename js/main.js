@@ -292,6 +292,22 @@ setInterval(function () {
     xhttp.send();
 }, 2000);
 
+setInterval(function () {
+    let formData = new FormData();
+    formData.append('estado', lose);
+
+    let xhr = new XMLHttpRequest();
+    xhr.open('POST', '/estatPartida', true);
+    xhr.responseType = 'json';
+
+    xhr.onload = function (e) {
+        if (this.status == 200) {
+        }
+    };
+
+    xhr.send(formData);
+}, 3000);
+
 var nom;
 
 var emmagatzematge = {
