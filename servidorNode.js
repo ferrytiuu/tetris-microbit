@@ -49,7 +49,7 @@ function iniciar() {
             return res.end();
 
         }
-        else if (reqUrl.pathname == '/mainjs') {
+        else if (reqUrl.pathname == '/mainjs') {                        
             let content = fs.readFileSync('js/main.js', { encoding: 'utf8' });
             if (content == null) {
                 return "h1";
@@ -86,6 +86,7 @@ function iniciar() {
                 /*console.log("Campos:" + fields);*/
                 estatPartida= fields.estado;
                 console.log(estatPartida);
+                port.write(estatPartida+'\n');
             });
             res.writeHead(200);
             return res.end();

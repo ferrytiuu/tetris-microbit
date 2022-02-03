@@ -306,7 +306,7 @@ setInterval(function () {
     };
 
     xhr.send(formData);
-}, 3000);
+}, 1000);
 
 var nom;
 
