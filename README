@@ -1,0 +1,5 @@
+Per executar el programa:
+1) Arrossega l'arxiu microbit-Tetris.hex a la unitat MICROBIT
+2) Executa npm install
+3) Executa "node .\index.js"
+4) Obre en el navegador "localhost:8888/inici"

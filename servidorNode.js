@@ -16,28 +16,23 @@ var botons = [];
 
 function iniciar() {
 
+    // Obre el port serial
     port.on('open', () => {
         console.log('Serial port opened!');
     });
+
+    // Rep les dades enviades pels botons i les envia a l'array botons
     parser.on('data', (data) => {
         console.log(data);
         botons.push(data);
     });
 
-    port.write('1\n', (error)=>{
-        if(error){
-            return console.log('Error: ',error.message)
-        }else{
-            console.log('Not error')
-        }
-    });
 
     function onRequest(req, res) {
         const baseURL = req.protocol + '://' + req.headers.host + '/';
         const reqUrl = new URL(req.url, baseURL);
-        /*console.log(reqUrl);*/
-        /*console.log("Petició per a  " + reqUrl.pathname + " rebuda.");*/
 
+        // Carrega el HTML
         if (reqUrl.pathname == '/inici') {
             let content = fs.readFileSync('index.html', { encoding: 'utf8' });
             if (content == null) {
@@ -49,6 +44,8 @@ function iniciar() {
             return res.end();
 
         }
+
+        // Carrega el JS
         else if (reqUrl.pathname == '/mainjs') {                        
             let content = fs.readFileSync('js/main.js', { encoding: 'utf8' });
             if (content == null) {
@@ -60,6 +57,8 @@ function iniciar() {
             return res.end();
 
         }
+
+        // Carrega el CSS
         else if (reqUrl.pathname == '/estils') {
             let content = fs.readFileSync('css/estils.css', { encoding: 'utf8' });
             if (content == null) {
@@ -71,6 +70,8 @@ function iniciar() {
             return res.end();
 
         }
+
+        // Crea la variable botonsPila, on té el primer boto emmagatzemat dins botons 
         else if (reqUrl.pathname == '/botons') {
             let botonsPila = botons.shift();
             if (botonsPila == undefined) {
@@ -81,12 +82,28 @@ function iniciar() {
             console.log(botonsPila);
             return res.end();
 
-        } else if (reqUrl.pathname == '/estatPartida') {
+        } 
+        
+        // Envia les dades de l'estat de la partida a la placa
+        else if (reqUrl.pathname == '/estatPartida') {
             form.parse(req, async (err, fields, files) => {
                 /*console.log("Campos:" + fields);*/
                 estatPartida= fields.estado;
                 console.log(estatPartida);
                 port.write(estatPartida+'\n');
+            });
+            res.writeHead(200);
+            return res.end();
+
+        } 
+        
+        // Envia les dades dels LEDs a la placa
+        else if (reqUrl.pathname == '/leds') {
+            form.parse(req, async (err, fields, files) => {
+                /*console.log("Campos:" + fields);*/
+                leds= fields.id;
+                console.log(leds);
+                port.write(leds+'\n');
             });
             res.writeHead(200);
             return res.end();
