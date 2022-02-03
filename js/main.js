@@ -55,30 +55,6 @@ function newShape() {
     currentX = 5;
     currentY = 0;
 
-    switch (id) {
-        case '0':
-            port.write('0');
-            break;
-        case '1':
-            port.write('1');
-            break;
-        case '2':
-            port.write('2');
-            break;
-        case '3':
-            port.write('3');
-            break;
-        case '4':
-            port.write('4');
-            break;
-        case '5':
-            port.write('5');
-            break;
-        case '6':
-            port.write('6');
-            break;
-
-    }
 }
 
 // clears the board
@@ -158,39 +134,9 @@ function clearLines() {
     }
 }
 
-function keyPress(direccio) {
-    switch (direccio) {
-        case 'botoA':
-            if (valid(-1)) {
-                --currentX;
-            }
-            break;
-        case 'botoB':
-            if (valid(1)) {
-                ++currentX;
-            }
-            break;
-        case 'down':
-            if (valid(0, 1)) {
-                ++currentY;
-            }
-            break;
-        case 'botoC':
-            var rotated = rotate(current);
-            if (valid(0, 0, rotated)) {
-                current = rotated;
-            }
-            break;
-        case 'drop':
-            while (valid(0, 1)) {
-                ++currentY;
-            }
-            tick();
-            break;
-    }
-}
 
-/*function keyPress(key) {
+function keyPress(key) {
+    console.log("teclaPulsada: "+ key);
     switch (key) {
         case 'left':
             if (valid(-1)) {
@@ -200,6 +146,7 @@ function keyPress(direccio) {
         case 'right':
             if (valid(1)) {
                 ++currentX;
+                console.log('valid');
             }
             break;
         case 'down':
@@ -219,8 +166,11 @@ function keyPress(direccio) {
             }
             tick();
             break;
+        default:
+            console.log('validDefault');
+            break;
     }
-}*/
+}
 
 // checks if the resulting position of current shape will be feasible
 function valid(offsetX, offsetY, newCurrent) {
@@ -275,7 +225,7 @@ function clearAllIntervals() {
 
 /* controller.js */
 
-/*document.body.onkeydown = function (e) {
+document.body.onkeydown = function (e) {
     var keys = {
         37: 'left',
         39: 'right',
@@ -287,7 +237,7 @@ function clearAllIntervals() {
         keyPress(keys[e.keyCode]);
         render();
     }
-};*/
+};
 
 /* render.js */
 
@@ -333,14 +283,14 @@ setInterval(function () {
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             let teclaPresionada = this.responseText;
-            document.getElementById("teclaPresionada").innerHTML =teclaPresionada;
-            
+            document.getElementById("teclaPresionada").innerHTML = teclaPresionada;
+            keyPress(teclaPresionada);
+            render();
         }
     };
     xhttp.open("GET", "http://localhost:8888/botons");
-    keyPress(teclaPresionada);
     xhttp.send();
-}, 100);
+}, 2000);
 
 var nom;
 
