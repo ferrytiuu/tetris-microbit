@@ -247,7 +247,7 @@ var W = 300, H = 600;
 var BLOCK_W = W / COLS, BLOCK_H = H / ROWS;
 
 // draw a single square at (x, y)
-function drawBlock(x, y) {
+let drawBlock = (x, y) => {
     ctx.fillRect(BLOCK_W * x, BLOCK_H * y, BLOCK_W - 1, BLOCK_H - 1);
     ctx.strokeRect(BLOCK_W * x, BLOCK_H * y, BLOCK_W - 1, BLOCK_H - 1);
 }
@@ -336,12 +336,30 @@ function enregistra_resultats() {
     emmagatzematge.desar(nom);
 }
 
-window.onload = () => { emmagatzematge.mostrar() };
+window.onload = () => emmagatzematge.mostrar();
 
 /*
-bugs: 
--suma 50 punts mes al final
--s'ha d'impedir registrar valors null, undefined i espais en blanc al ranking
--s'ha d'ordenar el ranking per puntuació
 -localStorage.clear(); per borrar el ranking
+
+Coses a fer:
+-Us tecnologia:
+	-musica
+	-botons
+	-led amb forma
+-Emmagatzematge de dades:
+	-ordenar ranking webstorage (no dona nota)
+    -s'ha d'impedir registrar valors null, undefined i espais en blanc al ranking (no dona nota)
+	-utilitzar indexedDB
+-HTML5 APIs:
+	-fer servir una tercera api
+-POO:
+	-crear clases ES6 y objectes basats en prototipatge
+    -afegirlis atributs, metodes, herencia i poliformisme
+	-crear moduls
+-Funcions JS:
+	-utilitzar funcio dinamica on sigui
+-Arrays:
+	-fer piles i cues
+	-utilitzar metodes: sort, slice, foreach, map, reduce i filter
+	-utilitzar estructures for-in i for-of
 */
