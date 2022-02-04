@@ -89,7 +89,7 @@ function iniciar() {
             form.parse(req, async (err, fields, files) => {
                 /*console.log("Campos:" + fields);*/
                 estatPartida= fields.estado;
-                /*console.log(estatPartida);*/
+                console.log('Estat partida: '+estatPartida);
                 port.write(estatPartida+'\n');
             });
             res.writeHead(200);
@@ -102,7 +102,7 @@ function iniciar() {
             form.parse(req, async (err, fields, files) => {
                 /*console.log("Campos:" + fields);*/
                 leds= fields.id;
-                console.log(leds);
+                console.log('Peça actual: '+leds);
                 port.write(leds+'\n');
             });
             res.writeHead(200);

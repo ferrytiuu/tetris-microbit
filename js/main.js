@@ -3,10 +3,13 @@ var board = [];
 var lose;
 var interval;
 var intervalRender;
-var current; // current moving shape
-var currentX, currentY; // position of current shape
-var freezed; // is current shape settled on the board?
+var current;
+var currentX, currentY;
+var freezed;
 let puntuacio = 0;
+var nom;
+
+// Crea els arrays amb les diferents fitxes possibles
 var shapes = [
     [1, 1, 1, 1],
     [1, 1, 1, 0,
@@ -22,15 +25,16 @@ var shapes = [
     [0, 1, 0, 0,
         1, 1, 1]
 ];
+
 var colors = [
     'cyan', 'orange', 'blue', 'yellow', 'red', 'green', 'purple'
 ];
 
-// creates a new 4x4 shape in global variable 'current'
-// 4x4 so as to cover the size when the shape is rotated
+// Crea una nova forma aleatòria de l'array 4x4 en la variable global 'current'
+// Envia l'ID de la forma al servidor Node per mostrar els LEDs
 function newShape() {
     var id = Math.floor(Math.random() * shapes.length);
-    var shape = shapes[id]; // maintain id for color filling
+    var shape = shapes[id];
 
     document.getElementById('pecaActual').innerHTML = id;
 
@@ -63,15 +67,13 @@ function newShape() {
         }
     }
 
-    // new shape starts to move
     freezed = false;
-    // position where the shape will evolve
     currentX = 5;
     currentY = 0;
 
 }
 
-// clears the board
+// Neteja el canvas
 function init() {
     for (var y = 0; y < ROWS; ++y) {
         board[y] = [];
@@ -81,7 +83,7 @@ function init() {
     }
 }
 
-// keep the element moving down, creating new shapes and clearing lines
+// Mou l'element cap abaix, creant noves peces i netejant les línies
 function tick() {
     if (valid(0, 1)) {
         ++currentY;
@@ -99,7 +101,7 @@ function tick() {
     }
 }
 
-// stop shape at its position and fix it to board
+// Deixa fixa la forma al final de la línia
 function freeze() {
     for (var y = 0; y < 4; ++y) {
         for (var x = 0; x < 4; ++x) {
@@ -114,7 +116,7 @@ function freeze() {
     document.getElementById('puntuacioPartida').innerHTML = puntuacio;
 }
 
-// returns rotates the rotated shape 'current' perpendicularly anticlockwise
+// Retorna la peça actual (current) rotada
 function rotate(current) {
     var newCurrent = [];
     for (var y = 0; y < 4; ++y) {
@@ -127,7 +129,7 @@ function rotate(current) {
     return newCurrent;
 }
 
-// check if any lines are filled and clear them
+// Comprova si les línies són plenes i les neteja
 function clearLines() {
     for (var y = ROWS - 1; y >= 0; --y) {
         var rowFilled = true;
@@ -149,6 +151,7 @@ function clearLines() {
 }
 
 
+// Mou les peces segons la tecla que arribi
 function keyPress(key) {
     console.log("teclaPulsada: "+ key);
     switch (key) {
@@ -186,7 +189,7 @@ function keyPress(key) {
     }
 }
 
-// checks if the resulting position of current shape will be feasible
+// Comprova si la posició de la peça actual és possible
 function valid(offsetX, offsetY, newCurrent) {
     offsetX = offsetX || 0;
     offsetY = offsetY || 0;
@@ -216,8 +219,11 @@ function valid(offsetX, offsetY, newCurrent) {
     return true;
 }
 
+// Comença la partida al clickar
 let playButtonClicked = new Function("newGame();document.getElementById('playbutton').disabled = true;");
 
+
+// Comença la nova partida
 function newGame() {
     puntuacio = 0;
     document.getElementById('puntuacioPartida').innerHTML = puntuacio;
@@ -229,10 +235,11 @@ function newGame() {
     interval = setInterval(tick, 400);
 }
 
+// Neteja el canvas
 let clearAllIntervals = new Function('clearInterval(interval);clearInterval(intervalRender);');
 
-/* controller.js */
-
+// A l'apretar les tecles, crea un objecte, i assigna els valors numèrics de les tecles als noms dels moviments
+// Envia els moviments a la funció keyPress perquè faci els moviments.
 document.body.onkeydown = function (e) {
     var keys = {
         37: 'left',
@@ -247,20 +254,19 @@ document.body.onkeydown = function (e) {
     }
 };
 
-/* render.js */
-
+// Crea el canvas
 var canvas = document.getElementsByTagName('canvas')[0];
 var ctx = canvas.getContext('2d');
 var W = 300, H = 600;
 var BLOCK_W = W / COLS, BLOCK_H = H / ROWS;
 
-// draw a single square at (x, y)
+// Crea els blocs
 let drawBlock = (x, y) => {
     ctx.fillRect(BLOCK_W * x, BLOCK_H * y, BLOCK_W - 1, BLOCK_H - 1);
     ctx.strokeRect(BLOCK_W * x, BLOCK_H * y, BLOCK_W - 1, BLOCK_H - 1);
 }
 
-// draws the board and the moving shape
+// Dibuixa la taula i les figures que es mouen
 function render() {
     ctx.clearRect(0, 0, W, H);
 
@@ -286,6 +292,7 @@ function render() {
     }
 }
 
+// Crea un interval de 0,3 secs on rep el botó enviat
 setInterval(function () {
     const xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
@@ -300,6 +307,7 @@ setInterval(function () {
     xhttp.send();
 }, 2000);
 
+// Crea un interval d'1 sec on envia l'estat de la partida
 setInterval(function () {
     let formData = new FormData();
     formData.append('estado', lose);
@@ -316,7 +324,7 @@ setInterval(function () {
     xhr.send(formData);
 }, 1000);
 
-var nom;
+// Crea la classe Emmagatzemador per guardar les puntuacions mitjançant WebStorage
 
 class Emmagatzemador {
     constructor() {
