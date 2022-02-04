@@ -1,6 +1,6 @@
 Per executar el programa:
 1) Arrossega l'arxiu microbit-Tetris.hex a la unitat MICROBIT
 2) Executa npm install
-3) Modifica, en cas necessari, el port COM on la placa es trobi connectada (COM1, COM2…)
+3) Modifica, en cas necessari, el port COM on la placa es trobi connectada (COM1, COM2…) dins servidorNode.js (Línia 9)
 4) Executa "node .\index.js"
 5) Obre en el navegador "localhost:8888/inici"
