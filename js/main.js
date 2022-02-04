@@ -202,10 +202,7 @@ function valid(offsetX, offsetY, newCurrent) {
     return true;
 }
 
-function playButtonClicked() {
-    newGame();
-    document.getElementById("playbutton").disabled = true;
-}
+let playButtonClicked = new Function("newGame();document.getElementById('playbutton').disabled = true;");
 
 function newGame() {
     puntuacio = 0;
@@ -218,10 +215,7 @@ function newGame() {
     interval = setInterval(tick, 400);
 }
 
-function clearAllIntervals() {
-    clearInterval(interval);
-    clearInterval(intervalRender);
-}
+let clearAllIntervals = new Function('clearInterval(interval);clearInterval(intervalRender);');
 
 /* controller.js */
 
@@ -310,28 +304,32 @@ setInterval(function () {
 
 var nom;
 
-var emmagatzematge = {
-    taula: document.getElementById("taula"),
-    desar: function (nomDesar) {
+class Emmagatzemador {
+    constructor() {
+        this.taula = document.getElementById("taula");
+    }
+    desar(nomDesar) {
         localStorage.setItem(nomDesar, puntuacio);
-        emmagatzematge.esborrarTaula();
-        emmagatzematge.mostrar();
-    },
-    mostrar: function () {
+        this.esborrarTaula();
+        this.mostrar();
+    }
+    mostrar() {
         for (var i = 0; i < localStorage.length; i++) {
-            var fila = taula.insertRow(0);
+            var fila = this.taula.insertRow(0);
             fila.insertCell(0).innerHTML = localStorage.key(i);
             fila.insertCell(1).innerHTML = localStorage.getItem(localStorage.key(i));
         };
-    },
-    esborrarTaula: function () {
-        while (taula.rows.length > 0) {
-            taula.deleteRow(0);
-        }
     }
+    esborrarTaula() {
+        while (this.taula.rows.length > 0) {
+            this.taula.deleteRow(0);
+        }
+    } 
 }
 
-function enregistra_resultats() {
+var emmagatzematge = new Emmagatzemador();
+
+let enregistra_resultats = () => {
     var nom = prompt('Introdueix el teu nom: ');
     emmagatzematge.desar(nom);
 }
@@ -353,11 +351,8 @@ Coses a fer:
 -HTML5 APIs:
 	-fer servir una tercera api
 -POO:
-	-crear clases ES6 y objectes basats en prototipatge
-    -afegirlis atributs, metodes, herencia i poliformisme
+    -afegirlis herencia i poliformisme
 	-crear moduls
--Funcions JS:
-	-utilitzar funcio dinamica on sigui
 -Arrays:
 	-fer piles i cues
 	-utilitzar metodes: sort, slice, foreach, map, reduce i filter
