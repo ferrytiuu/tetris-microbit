@@ -305,7 +305,7 @@ setInterval(function () {
     };
     xhttp.open("GET", "http://localhost:8888/botons");
     xhttp.send();
-}, 2000);
+}, 300);
 
 // Crea un interval d'1 sec on envia l'estat de la partida
 setInterval(function () {
