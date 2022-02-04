@@ -79,7 +79,7 @@ function iniciar() {
             }
             res.writeHead(200, { "Content-Type": "text/plain; charset=utf-8" });
             res.write(botonsPila);
-            console.log(botonsPila);
+            /*console.log(botonsPila);*/
             return res.end();
 
         } 
@@ -89,7 +89,7 @@ function iniciar() {
             form.parse(req, async (err, fields, files) => {
                 /*console.log("Campos:" + fields);*/
                 estatPartida= fields.estado;
-                console.log(estatPartida);
+                /*console.log(estatPartida);*/
                 port.write(estatPartida+'\n');
             });
             res.writeHead(200);

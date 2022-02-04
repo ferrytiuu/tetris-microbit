@@ -34,6 +34,20 @@ function newShape() {
 
     document.getElementById('pecaActual').innerHTML = id;
 
+    let formData = new FormData();
+    formData.append('id', id);
+
+    let xhr = new XMLHttpRequest();
+    xhr.open('POST', '/leds', true);
+    xhr.responseType = 'json';
+
+    xhr.onload = function (e) {
+        if (this.status == 200) {
+        }
+    };
+
+    xhr.send(formData);
+
 
     current = [];
     for (var y = 0; y < 4; ++y) {
