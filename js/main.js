@@ -358,25 +358,3 @@ let enregistra_resultats = () => {
 
 window.onload = () => emmagatzematge.mostrar();
 
-/*
--localStorage.clear(); per borrar el ranking
-
-Coses a fer:
--Us tecnologia:
-	-musica
-	-botons
-	-led amb forma
--Emmagatzematge de dades:
-	-ordenar ranking webstorage (no dona nota)
-    -s'ha d'impedir registrar valors null, undefined i espais en blanc al ranking (no dona nota)
-	-utilitzar indexedDB
--HTML5 APIs:
-	-fer servir una tercera api
--POO:
-    -afegirlis herencia i poliformisme
-	-crear moduls
--Arrays:
-	-fer piles i cues
-	-utilitzar metodes: sort, slice, foreach, map, reduce i filter
-	-utilitzar estructures for-in i for-of
-*/
